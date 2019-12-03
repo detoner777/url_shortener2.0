@@ -20,10 +20,17 @@ mongoose
   .then(() => console.log("Mongo DB connected"))
   .catch(err => console.log(err));
 
-//Hash Api
+//Hash API
 app.get("/:hash", (req, res) => {
   const id = req.params.hash;
-  console.log(id);
+  URL.findOne({ _id: id }, (err, doc) => {
+    if (doc) {
+      console.log(doc.url);
+      res.redirect("http://" + doc.url);
+    } else {
+      res.redirect("/");
+    }
+  });
 });
 
 app.get("/", (req, res) => {
