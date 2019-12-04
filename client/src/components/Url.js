@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
+import validator from "validator";
 import "../App.css";
 
 export class Url extends Component {
@@ -16,13 +17,26 @@ export class Url extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    axios
-      .post("api/shorten", {
-        url: this.state.url
-      })
-      .then(res => {
-        console.log(res);
-      });
+    const validURL = validator.isURL(this.state.url, {
+      require_protocol: true
+    });
+    if (!validURL) {
+      alert(
+        "Please ensure this url is correct and includes the http(s) protocol"
+      );
+    } else {
+      console.log("URL is: ", this.state.url);
+      axios
+        .post("http://localhost:5000/api/shorten", {
+          url: this.state.url
+        })
+        .then(res => {
+          this.setState({
+            link: `https://skorochuvach.ink/${res.data.hash}`
+          });
+        })
+        .catch(err => console.log(err));
+    }
   };
 
   render() {

@@ -3,6 +3,24 @@ const router = express.Router();
 const uniqid = require("uniqid");
 const URL = require("../../models/Urls");
 
+//issue fix --> Access to XMLHttpRequest at 'http://localhost:5000/api/shorten' from origin 'http://localhost:3000' has been blocked by CORS policy: Response to preflight request doesn't pass access control check: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+router.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Methods",
+    "GET, POST, OPTIONS, PUT, PATCH, DELETE"
+  );
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, X-Access-Token,XKey,Authorization"
+  );
+  // res.header(
+  //   "Access-Control-Allow-Origin",
+  //   "Origin, X-Requested-With, Content-Type, Accept"
+  // );
+  next();
+});
+
 //@route GET /api/shorten/test
 //@desc Test API end point
 //@access Public
